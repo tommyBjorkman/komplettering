@@ -5,6 +5,7 @@ let data = fetch('https://fakestoreapi.com/products')
             .then(res => res.json())
             .then(data => {
                 for (let i = 1; i < data.length; i++) {
+                
                     productsEl.innerHTML += `
                     <div class="item">
                     <div class="item-container">
@@ -27,7 +28,25 @@ let data = fetch('https://fakestoreapi.com/products')
                     </div>
                 </div>
                     `;
+                    
                 };
+                
+                
+                
             });
+            console.log(data);
 
-            
+            let cart = [];
+
+
+
+        function addToCart(id) {
+             if(cart.some((item) => item.id === id)){
+                    alert("product already in cart")
+                }else{
+                   const item = dataCart.find((dataCart) => dataCart.id === id);
+
+                    cart.push(item);
+
+            console.log(cart);
+              }}
