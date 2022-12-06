@@ -1,5 +1,7 @@
 const productsEl = document.querySelector(".products");
 const cartItemsEl = document.querySelector(".cart-items");
+const subtotalEl = document.querySelector(".subtotal");
+const totalItemsInCartEl = document.querySelector(".total-items-in-cart");
 
 function renderProdcuts() {
     products.forEach((product) => {
@@ -34,7 +36,7 @@ let cart = [];
 updateCart();
 function addToCart(id) {
     if(cart.some((item) => item.id === id)){
-        alert("product already in cart")
+        changeNumberOfUnits("plus", id)
     } else {
         const item = products.find((product) => product.id === id);
         cart.push({
@@ -47,8 +49,22 @@ function addToCart(id) {
 }
 function updateCart(){
     renderCartItems();
-   // renderSubTotal();
+    renderSubTotal();
+
+    localStorage.setItem("CART", JSON.stringify(cart));
 }
+
+function renderSubTotal(){
+    let totalPrice = 0, totalItems = 0;
+
+    cart.forEach((item) => {
+        totalPrice += item.price * item.numberOfUnits;
+        totalItems += item.numberOfUnits;
+    });
+    subtotalEl.innerHTML = `Subtotal (${totalItems} items): $${totalPrice.toFixed(2)}`;
+    totalItemsInCartEl.innerHTML = totalItems;
+}
+
 function renderCartItems() {
     cartItemsEl.innerHTML = ""; 
     cart.forEach((item) => {
@@ -70,13 +86,20 @@ function renderCartItems() {
         `;
     });
   }
+
+function removeItemFromCart(id) {
+    cart = cart.filter((item) => item.id !== id);
+
+    updateCart();
+}
+
 function changeNumberOfUnits(action, id) {
     cart = cart.map((item) => {
         let numberOfUnits = item.numberOfUnits;
         if(item.id === id){
-            if(action === "minus"){
+            if(action === "minus" && numberOfUnits > 1){
                 numberOfUnits--;
-            }else if (action === "plus") {
+            }else if (action === "plus" && numberOfUnits < item.instock) {
                 numberOfUnits++;
             }
         }
