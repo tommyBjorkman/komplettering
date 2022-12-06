@@ -31,9 +31,10 @@ function renderProdcuts() {
   }
 renderProdcuts();
 
-let cart = [];
-
+let cart = JSON.parse(localStorage.getItem("CART")) || [];
 updateCart();
+
+
 function addToCart(id) {
     if(cart.some((item) => item.id === id)){
         changeNumberOfUnits("plus", id)
@@ -44,7 +45,7 @@ function addToCart(id) {
             numberOfUnits: 1,
         });
     }
-
+    updateCart();
 
 }
 function updateCart(){
