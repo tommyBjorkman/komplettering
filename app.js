@@ -1,4 +1,5 @@
 const productsEl = document.querySelector(".products");
+const cartItemsEl = document.querySelector(".cart-items");
 
 let datar = fetch('https://fakestoreapi.com/products')
             .then(res => res.json())
@@ -36,17 +37,41 @@ let datar = fetch('https://fakestoreapi.com/products')
 
 let cart = [];
 
-const targetNode = document.querySelector("div");
-const observerOptions = {
-  childList: true,
-  attributes: true,
-  subtree: true
-};
-const observer = new MutationObserver(callback);
-observer.observe(targetNode, observerOptions);
+
 function addToCart(id) {
-    const item = productId.find((productId) => productId === id);
+    if(cart.some((item) => item.id === id)){
+        alert("product already in cart")
+    } else {
+        const item = productId.find((productId) => productId === id);
+        cart.push({
+            ...item, 
+            numberOfUnits: 1,
+        });
+    }
+updateCart();
 
-    console.log(item);
 }
-
+function updateCart(){
+    renderCartItems();
+    renderSubTotal();
+}
+function renderCartItems(){
+    cart.forEach((item) => {
+        cartItemsEl.innetHTML += `
+        <div class="cart-item">
+                    <div class="item-info">
+                        <img src="${data[i].image}" alt="${data[i].title}">
+                        <h4>${data[i].title}</h4>
+                    </div>
+                    <div class="unit-price">
+                        <small>$</small>${data[i].price}
+                    </div>
+                    <div class="units">
+                        <div class="btn minus">-</div>
+                        <div class="number">1</div>
+                        <div class="btn plus">+</div>           
+                    </div>
+                </div>
+        `
+    });
+}
