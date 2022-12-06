@@ -21,7 +21,7 @@ let datar = fetch('https://fakestoreapi.com/products')
                         <div class="add-to-wishlist">
                             <img src="./icons/heart.png" alt="add to wish list">
                         </div>
-                        <div class="add-to-cart" "add-cart" "product">${data[i].id}
+                        <div class="add-to-cart" "add-cart" onclick="addToCart(${data[i].id})">
                             <img src="./icons/bag-plus.png" alt="add to cart">
                         </div>
                     </div>
@@ -33,20 +33,20 @@ let datar = fetch('https://fakestoreapi.com/products')
                 
                 
             });
-            let cart = [];
-            
-            const addCart = document.getElementsByClassName('product');
-           for ( let i=0; i<product.length; i++ ) {
-            product[i].addEventListener("click", addToCart)};
-            console.log(product);
-            function addToCart(id) {
-                 if(cart.some((item) => item.id === id)){
-                        alert("product already in cart")
-                    }else{
-                       const item = data.find((data) => data.id === id);
-    
-                        cart.push(item);
-    
-                
-                  }};
+
+let cart = [];
+
+const targetNode = document.querySelector("div");
+const observerOptions = {
+  childList: true,
+  attributes: true,
+  subtree: true
+};
+const observer = new MutationObserver(callback);
+observer.observe(targetNode, observerOptions);
+function addToCart(id) {
+    const item = productId.find((productId) => productId === id);
+
+    console.log(item);
+}
 
