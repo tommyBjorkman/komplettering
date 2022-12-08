@@ -47,17 +47,16 @@ updateCart();
 
 
 async function addToCart(id) {
-    let items = await renderProducts();
+    let products = await renderProdcuts();
     if(cart.some((item) => item.id === id)){
         changeNumberOfUnits("plus", id)
     } else {
-        const item = products.find((product) => product.id === id);
+        const item = find((product) => product.id === id);
         cart.push({
             ...item, 
             numberOfUnits: 1,
         });
     }
-    items();
     updateCart();
 
 }
@@ -85,7 +84,7 @@ function renderCartItems() {
       cartItemsEl.innerHTML += `
           <div class="cart-item">
               <div class="item-info" onclick="removeItemFromCart(${item.id})">
-                  <img src="${item.imgSrc}" alt="${item.name}">
+                  <img src="${item.image}" alt="${item.name}">
                   <h4>${item.name}</h4>
               </div>
               <div class="unit-price">
