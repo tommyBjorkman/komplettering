@@ -1,4 +1,4 @@
-const products = [
+[
   {
     id: 0,
     name: "T-shirt 1",

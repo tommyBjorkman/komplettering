@@ -5,53 +5,54 @@ const cartItemsEl = document.querySelector(".cart-items");
 const subtotalEl = document.querySelector(".subtotal");
 const totalItemsInCartEl = document.querySelector(".total-items-in-cart");
 
-async function getProducts() {
-    let url = 'https://fakestoreapi.com/products';
-    try {
-        let res = await fetch(url);
-        return await res.json();
-    }catch (error){
-        console.log(error);
-    }
-}
+let product;
+let url = 'https://fakestoreapi.com/products';
+
+    
+fetch(url)
+    .then((res) => res.json())
+    .then((data) => {
+        product = data;
+        
+        renderProdcuts(product);
+        
+});
 
 
-async function renderProdcuts() {
-    let products = await getProducts();
-    products.forEach((product) => {
+
+function renderProdcuts(product) {
+    for (let i = 0; i < product.length; i++) {
       productsEl.innerHTML += `
               <div class="item">
                   <div class="item-container">
                       <div class="item-img">
-                          <img src="${product.image}" alt="${product.name}">
+                          <img src="${product[i].image}" alt="${product[i].title}">
                       </div>
                       <div class="desc">
-                          <h2>${product.name}</h2>
-                          <h2><small>$</small>${product.price}</h2>
+                          <h2>${product[i].title}</h2>
+                          <h2><small>$</small>${product[i].price}</h2>
                           <p>
-                              ${product.description}
+                              ${product[i].description}
                           </p>
                       </div>
-                      <div class="add-to-cart" onclick="addToCart(${product.id})">
+                      <div class="add-to-cart" onclick="addToCart(${product[i].id})">
                           <img src="./icons/bag-plus.png" alt="add to cart">
                       </div>
                   </div>
               </div>
           `;
-    });
+    };
   }
-renderProdcuts();
-
+console.log(product);
 let cart = JSON.parse(localStorage.getItem("CART")) || [];
 updateCart();
 
 
-async function addToCart(id) {
-    let products = await renderProdcuts();
+function addToCart(id) {
     if(cart.some((item) => item.id === id)){
         changeNumberOfUnits("plus", id)
     } else {
-        const item = find((product) => product.id === id);
+        const item = find((product) => product[i].id === id);
         cart.push({
             ...item, 
             numberOfUnits: 1,
@@ -67,9 +68,9 @@ function updateCart(){
     localStorage.setItem("CART", JSON.stringify(cart));
 }
 
-function renderSubTotal(){
+async function renderSubTotal(){
     let totalPrice = 0, totalItems = 0;
-
+    await renderCartItems();
     cart.forEach((item) => {
         totalPrice += item.price * item.numberOfUnits;
         totalItems += item.numberOfUnits;
@@ -84,8 +85,8 @@ function renderCartItems() {
       cartItemsEl.innerHTML += `
           <div class="cart-item">
               <div class="item-info" onclick="removeItemFromCart(${item.id})">
-                  <img src="${item.image}" alt="${item.name}">
-                  <h4>${item.name}</h4>
+                  <img src="${item.image}" alt="${item.title}">
+                  <h4>${item.title}</h4>
               </div>
               <div class="unit-price">
                   <small>$</small>${item.price}
@@ -112,7 +113,7 @@ function changeNumberOfUnits(action, id) {
         if(item.id === id){
             if(action === "minus" && numberOfUnits > 1){
                 numberOfUnits--;
-            }else if (action === "plus" && numberOfUnits < item.instock) {
+            }else if (action === "plus" && numberOfUnits < 15) {
                 numberOfUnits++;
             }
         }
