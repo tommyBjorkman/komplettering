@@ -46,7 +46,8 @@ let cart = JSON.parse(localStorage.getItem("CART")) || [];
 updateCart();
 
 
-function addToCart(id) {
+async function addToCart(id) {
+    let items = await renderProducts();
     if(cart.some((item) => item.id === id)){
         changeNumberOfUnits("plus", id)
     } else {
@@ -56,6 +57,7 @@ function addToCart(id) {
             numberOfUnits: 1,
         });
     }
+    items();
     updateCart();
 
 }
