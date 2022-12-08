@@ -5,13 +5,25 @@ const cartItemsEl = document.querySelector(".cart-items");
 const subtotalEl = document.querySelector(".subtotal");
 const totalItemsInCartEl = document.querySelector(".total-items-in-cart");
 
-function renderProdcuts() {
+async function getProducts() {
+    let url = 'https://fakestoreapi.com/products';
+    try {
+        let res = await fetch(url);
+        return await res.json();
+    }catch (error){
+        console.log(error);
+    }
+}
+
+
+async function renderProdcuts() {
+    let products = await getProducts();
     products.forEach((product) => {
       productsEl.innerHTML += `
               <div class="item">
                   <div class="item-container">
                       <div class="item-img">
-                          <img src="${product.imgSrc}" alt="${product.name}">
+                          <img src="${product.image}" alt="${product.name}">
                       </div>
                       <div class="desc">
                           <h2>${product.name}</h2>
