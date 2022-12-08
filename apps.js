@@ -50,12 +50,15 @@ for (let i =0; i < clickCart.length; i++) {
 
 let cart = JSON.parse(localStorage.getItem("CART")) || [];
 updateCart();
-console.log(product[i].id);
+
+
+
 function addToCart(id) {
     if(cart.some((item) => item.id === id)){
         changeNumberOfUnits("plus", id)
     } else {
         const item = find((product) => product[i].id === id);
+        
         cart.push({
             ...item, 
             numberOfUnits: 1,
