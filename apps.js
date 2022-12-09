@@ -124,3 +124,17 @@ function changeNumberOfUnits(action, id) {
     })
     updateCart();
 }
+fetch('https://fakestoreapi.com/products',{
+            method:"POST",
+            body:JSON.stringify(
+                {
+                    title: 'coding computer',
+                    price: 15.5,
+                    description: 'lorem ipsum set',
+                    image: 'https://images.pexels.com/photos/1714208/pexels-photo-1714208.jpeg',
+                    category: 'electronic'
+                }
+            )
+        })
+            .then(res=>res.json())
+            .then(json=>console.log(json))
