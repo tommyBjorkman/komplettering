@@ -45,19 +45,26 @@ function renderProdcuts(product) {
           `;
     
 for (let i =0; i < clickCart.length; i++) {
-    clickCart[i].addEventListener("click", addToCart, false);
+    clickCart[i].addEventListener("click", addToCart);
 }
 
 let cart = JSON.parse(localStorage.getItem("CART")) || [];
 updateCart();
 
 
-
+fetch(url)
+    .then((res) => res.json())
+    .then((data) => {
+        let item = data;
+        
+        addToCart(item);
+        
+});
 function addToCart(id) {
     if(cart.some((item) => item.id === id)){
         changeNumberOfUnits("plus", id)
-    } else {
-        const item = find((product) => product[i].id === id);
+    } else  {
+         const item = find((product) => product[i].id === id);
         
         cart.push({
             ...item, 
@@ -107,7 +114,7 @@ function renderCartItems() {
     });
   }
   for (let i =0; i < removeCart.length; i++) {
-    removeCart[i].addEventListener("click", removeItemFromCart, false);
+    removeCart[i].addEventListener("click", removeItemFromCart);
 }
 function removeItemFromCart(id) {
     cart = cart.filter((item) => item.id !== id);
