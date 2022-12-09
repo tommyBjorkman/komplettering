@@ -4,8 +4,6 @@ const productsEl = document.querySelector(".products");
 const cartItemsEl = document.querySelector(".cart-items");
 const subtotalEl = document.querySelector(".subtotal");
 const totalItemsInCartEl = document.querySelector(".total-items-in-cart");
-let clickCart = document.getElementsByClassName("add-to-cart");
-let removeCart = document.getElementsByClassName("item-info");
 
 let product;
 let url = 'https://fakestoreapi.com/products';
@@ -37,35 +35,24 @@ function renderProdcuts(product) {
                               ${product[i].description}
                           </p>
                       </div>
-                      <div class="add-to-cart" ${product[i].id}>
+                      <div class="add-to-cart" onclick="addToCart(${product[i].id})">
                           <img src="./icons/bag-plus.png" alt="add to cart">
                       </div>
                   </div>
               </div>
           `;
-    
-for (let i =0; i < clickCart.length; i++) {
-    clickCart[i].addEventListener("click", addToCart);
-}
+    };
+  }
 
 let cart = JSON.parse(localStorage.getItem("CART")) || [];
 updateCart();
 
 
-fetch(url)
-    .then((res) => res.json())
-    .then((data) => {
-        let item = data;
-        
-        addToCart(item);
-        
-});
 function addToCart(id) {
     if(cart.some((item) => item.id === id)){
         changeNumberOfUnits("plus", id)
-    } else  {
-         const item = find((product) => product[i].id === id);
-        
+    } else {
+        const item = product.find((product) => product.id === id);
         cart.push({
             ...item, 
             numberOfUnits: 1,
@@ -81,9 +68,9 @@ function updateCart(){
     localStorage.setItem("CART", JSON.stringify(cart));
 }
 
-function renderSubTotal(){
+ function renderSubTotal(){
     let totalPrice = 0, totalItems = 0;
-    renderCartItems();
+     renderCartItems();
     cart.forEach((item) => {
         totalPrice += item.price * item.numberOfUnits;
         totalItems += item.numberOfUnits;
@@ -97,7 +84,7 @@ function renderCartItems() {
     cart.forEach((item) => {
       cartItemsEl.innerHTML += `
           <div class="cart-item">
-              <div class="item-info" ${item.id}>
+              <div class="item-info" onclick="removeItemFromCart(${item.id})">
                   <img src="${item.image}" alt="${item.title}">
                   <h4>${item.title}</h4>
               </div>
@@ -113,9 +100,7 @@ function renderCartItems() {
         `;
     });
   }
-  for (let i =0; i < removeCart.length; i++) {
-    removeCart[i].addEventListener("click", removeItemFromCart);
-}
+
 function removeItemFromCart(id) {
     cart = cart.filter((item) => item.id !== id);
 
@@ -138,4 +123,4 @@ function changeNumberOfUnits(action, id) {
         };
     })
     updateCart();
-}}};
+}
